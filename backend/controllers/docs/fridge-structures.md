@@ -2,7 +2,7 @@
 Example structures of what endpoints receive and responds with
 
 ## Add Item To Fridge
-PUT /item  
+PUT /fridge/item  
 ```
 Server Recieves:
 {
@@ -18,7 +18,7 @@ Server Recieves:
 ```
 
 ## Retrieve all items from fridge
-GET /items
+GET /fridge/items
 ```
 Server Response:
 {
@@ -30,7 +30,7 @@ Server Response:
 ```
 
 ## Retrieve Items By Search (wildcard)
-GET /items?name=item
+GET /fridge/items?name=item
 ```
 Server Response:
 {
@@ -42,7 +42,7 @@ Server Response:
 ```
 
 ## Remove item from fridge
-PATCH /item
+PATCH /fridge/item
 ```
 Server Receives:
 {
