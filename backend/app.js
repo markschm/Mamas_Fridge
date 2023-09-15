@@ -1,14 +1,16 @@
 const express = require('express');
 const app = express();
+const pool = require('./db/db')
 
 // consider using Joi for schema's
 
-app.get("/test", (req, res) => {
+app.get("/test", async (req, res) => {
     console.log("GET request to /test");
 
-    res.send({
-        name: "Mark",
-        age: 20
+    const results = await pool.query('SELECT * FROM testtable;');
+
+    res.json({
+        users: results['rows']
     });
 });
 
