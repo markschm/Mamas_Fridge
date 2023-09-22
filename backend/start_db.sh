@@ -12,16 +12,15 @@ docker run --name $container_name --rm -p $DB_PORT:$DB_PORT \
     -d postgres 2> /dev/null
 
 create_tables_command="
-CREATE TABLE IF NOT EXISTS testtable (
+CREATE TABLE IF NOT EXISTS fridge (
     _id serial PRIMARY KEY,
-    username VARCHAR (50) UNIQUE NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS anothertable (
-    _id serial PRIMARY KEY,
-    city VARCHAR(20) NOT NULL,
-    country VARCHAR(20) NOT NULL
+    name varchar(50) NOT NULL UNIQUE,
+    count smallint NOT NULL CHECK (count >= 0),
+    dates date[]
 );
 "
+
+# sleep to let container start
+sleep 2
 
 docker exec -it $container_name psql -U $DB_USER -d $DB_USER -c "$create_tables_command"
