@@ -14,7 +14,10 @@ DB_PORT
 
 ### Start Database
 ```
-> docker run --name test-postgres -p $DB_PORT:$DB_PORT -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_USER=$DB_USER -d postgres
+> docker run --name mamas-postgres -p $DB_PORT:$DB_PORT -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_USER=$DB_USER -d postgres
 ```
 
-at current moment you need to request /test-create to setup tables when db first started
+### Kill Database
+```
+> docker kill mamas-postgres
+```
