@@ -30,7 +30,7 @@ Server Response:
 ```
 
 ## Retrieve Items By Search (wildcard)
-GET /fridge/items?name=item
+GET /fridge/search?name=item
 ```
 Server Response:
 {
@@ -48,7 +48,7 @@ Server Receives:
 {
   "item": {
     "name": "yogurt",
-    "count": 2
+    "leftOver": 2
   }
 }
 ```

@@ -1,19 +1,21 @@
 const express = require('express');
 const app = express();
 
-// consider using Joi for schema's
+const fridgeRouter = require('./routes/fridgeRoutes');
 
-app.get("/test", (req, res) => {
-    console.log("GET request to /test");
 
-    res.send({
-        name: "Mark",
-        age: 20
-    });
+app.use(express.json());
+app.use((req, res, next) => {
+    console.log(`${req.method} request to ${req.url}`);
+    next();
 });
 
+// routers
+app.use('/fridge', fridgeRouter);
 
+
+// start server
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
-    console.log(`Server is running on port http://localhost:${port}`);
+    console.log(`Server is running on http://localhost:${port}`);
 });
