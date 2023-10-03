@@ -4,10 +4,12 @@ const isValidItem = (name, count, expiries) => {
         return false;
     }
 
-    if (typeof count !== "number" || isNaN(count) || count < 0) {
+    if (typeof count !== "number" || isNaN(count) || count < 0
+     || (count !== 1 && count !== expiries.length)) {
         return false;
     }
 
+    // validate dates
     const pattern = /^\d{4}-\d{2}-\d{2}$/;
     for (const expiry of expiries) {
         if (!pattern.test(expiry) && expiry.length === 10) {

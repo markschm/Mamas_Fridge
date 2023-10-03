@@ -1,6 +1,6 @@
 const pool = require('../db/db');
 const { isValidItem } = require('../utils/fridgeUtils');
-const { FRIDGE_TABLE, NAME, COUNT, DATES } = require('../utils/constants');
+const { FRIDGE_TABLE, NAME, COUNT, DATES, ROWS } = require('../utils/constants');
 
 
 // add item to fridge
@@ -29,7 +29,9 @@ const addItem = async (req, res) => {
 
     try {
         await pool.query(query, values);
+        
         res.status(200).json({});
+        console.log("Item successfully added to fridge!");
     } catch (error) {
         console.log("ERROR [addItem]: " + error.message);
         res.status(400).json({
@@ -42,14 +44,20 @@ const addItem = async (req, res) => {
 
 // retrieve all items from fridge
 const getItems = async (req, res) => {
-    // get all items, counts, expiries from fridge
-    // return json response
+    const result = (await pool.query(`SELECT * FROM ${FRIDGE_TABLE};`))[ROWS];
+    const items = [];
 
-    // TODO: remove later just for testing
-    const results = await pool.query("SELECT * FROM fridge;");
-    console.log(results['rows']);
+    for (const item of result) {
+        const newItem = {};
+        newItem['name'] = item.name;
+        newItem['count'] = item.count;
+        newItem['dates'] = item.dates;
 
-    res.status(200).json({});
+        items.push(newItem);
+    }
+
+    res.status(200).json({items: items});
+    console.log("Fridge opened!");
 };
 
 
