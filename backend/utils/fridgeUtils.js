@@ -1,5 +1,4 @@
-
-const isValidItem = (name, count, expiries) => {
+export const isValidItem = (name, count, expiries) => {
     if (typeof name !== "string" || name.length <= 0 || name.length >= 50) {
         return false;
     }
@@ -20,6 +19,16 @@ const isValidItem = (name, count, expiries) => {
     return expiries.length > 0;
 };
 
-module.exports = {
-    isValidItem
-}
+export const buildIngredientsResponse = (queryResult) => {
+    const items = [];
+
+    for (const item of queryResult) {
+        items.push({
+            "name": item.name,
+            "count": item.count,
+            "dates": item.dates
+        });
+    }
+
+    return items;
+};

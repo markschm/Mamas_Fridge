@@ -1,7 +1,7 @@
-const express = require('express');
+import { fridgeRouter } from './routes/fridgeRoutes.js';
+import express from 'express';
 const app = express();
 
-const fridgeRouter = require('./routes/fridgeRoutes');
 
 
 app.use(express.json());

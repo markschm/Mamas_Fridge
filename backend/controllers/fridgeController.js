@@ -1,11 +1,18 @@
-const pool = require('../db/db');
-const { isValidItem } = require('../utils/fridgeUtils');
-const { FRIDGE_TABLE, NAME, COUNT, DATES, ROWS } = require('../utils/constants');
+import { pool } from '../db/db.js';
+import { isValidItem, buildIngredientsResponse } from '../utils/fridgeUtils.js';
+
+
+// db constants
+const FRIDGE_TABLE = "fridge";
+const NAME = "name";
+const COUNT = "count";
+const DATES = "dates";
+const ROWS = "rows";
 
 
 // add item to fridge
 // TODO: will need more error checking, also figure out testing
-const addItem = async (req, res) => {
+export const addItem = async (req, res) => {
     const { name, count, expiries } = req.body.item;
 
     if (!isValidItem(name, count, expiries)) {
@@ -17,6 +24,9 @@ const addItem = async (req, res) => {
         return;
     }
 
+    // TOOD: not sure how date will be handled when passed from FE, so wait to figure
+    // out if this part is still needed. If it is will need parsing to convert back to
+    // original format before sending back to FE
     const formattedExpiries = expiries.map(expiry => `'${expiry}'::date`).join(', ');
 
     const values = [name, count];
@@ -43,44 +53,54 @@ const addItem = async (req, res) => {
 
 
 // retrieve all items from fridge
-const getItems = async (req, res) => {
-    const result = (await pool.query(`SELECT * FROM ${FRIDGE_TABLE};`))[ROWS];
-    const items = [];
+export const getItems = async (req, res) => {
+    try {
+        const result = (await pool.query(`SELECT * FROM ${FRIDGE_TABLE};`))[ROWS];
 
-    for (const item of result) {
-        const newItem = {};
-        newItem['name'] = item.name;
-        newItem['count'] = item.count;
-        newItem['dates'] = item.dates;
-
-        items.push(newItem);
+        res.status(200).json({items: buildIngredientsResponse(result)});
+        console.log("Fridge opened!");
+    } catch (error) {
+        console.log("ERROR [getItems]: " + error.message);
+        res.status(400).json({
+            message: error.message,
+            mamaMessage: "Mama can't open the fridge, try again later"
+        });
     }
-
-    res.status(200).json({items: items});
-    console.log("Fridge opened!");
 };
 
 
 // retrieve all items that match search (wildcard)
-const searchItems = async (req, res) => {
-    // get query param item name
-    // search db for items matching search
-    // resturn json response
-    res.status(200).json({});
+export const searchItems = async (req, res) => {
+    const itemName = req.query?.name;
+    if (!itemName) {
+        res.status(400).json({
+            message: "Missing 'name' in query parameters required for search",
+            mamaMessage: "Mama doesn't know what you're talking about"
+        });
+        return;
+    }
+    
+    try {
+        const query = `SELECT * FROM ${FRIDGE_TABLE} 
+                       WHERE name ILIKE $1`;
+        const result = (await pool.query(query, ["%" + itemName + "%"]))[ROWS];
+
+        res.status(200).json({items: buildIngredientsResponse(result)});
+        console.log("Fridge opened!");
+    } catch (error) {
+        console.log("ERROR [searchItem]: " + error.message);
+        res.status(400).json({
+            message: error.message,
+            mamaMessage: "Mama can't open the fridge, try again later"
+        });
+    }
 };
 
 
 // remove item from fridge
-const removeItem = async (req, res) => {
+export const removeItem = async (req, res) => {
     // get item name and remove counts
     // remove earliest expiries from fridge
     // if count left is 0 remove item completely
     res.status(200).json({});
-};
-
-module.exports = {
-    addItem,
-    getItems,
-    searchItems,
-    removeItem
 };
