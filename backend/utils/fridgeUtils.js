@@ -1,10 +1,14 @@
 export const isValidItem = (name, count, expiries) => {
-    if (typeof name !== "string" || name.length <= 0 || name.length >= 50) {
+    if (typeof name !== "string" 
+     || name.length <= 0 
+     || name.length >= 50) {
         return false;
     }
 
-    if (typeof count !== "number" || isNaN(count) || count < 0
-     || (count !== 1 && count !== expiries.length)) {
+    if (typeof count !== "number" 
+     || isNaN(count) 
+     || count < 0
+     || (count !== expiries.length)) {
         return false;
     }
 

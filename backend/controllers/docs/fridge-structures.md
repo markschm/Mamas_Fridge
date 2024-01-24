@@ -48,15 +48,20 @@ Server Receives:
 {
   "item": {
     "name": "yogurt",
-    "leftOver": 2
+    "removed": 2
   }
+}
+
+Server Response:
+{
+  "item": {...}
 }
 ```
 
 ## Error structure
 ```
 {
-  message: "exact error message",
-  mamaMessage: "Mama says that item can't go in the fridge"
+  "message": "exact error message",
+  "mamaMessage": "Mama says that item can't go in the fridge"
 }
 ```
