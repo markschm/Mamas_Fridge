@@ -24,3 +24,5 @@ CREATE TABLE IF NOT EXISTS fridge (
 sleep 2
 
 docker exec -it $container_name psql -U $DB_USER -d $DB_USER -c "$create_tables_command"
+
+nodemon app.js
